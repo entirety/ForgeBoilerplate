@@ -1,5 +1,5 @@
 def extraTxts = [
-    rootProject.file('LICENSE.txt')
+    rootProject.file('LICENSE')
 ]
 
 def changelog = rootProject.file('build/changelog.txt')
