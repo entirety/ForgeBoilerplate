@@ -13,7 +13,7 @@ authors = '${(mod.authors.collect { it.name }).join(', ')}'
 
 [[dependencies.${mod.id}]]
     modId = 'forge'
-    mandatory = true
+    mandatory = false
     versionRange = '${minecraft.forge.range}'
     ordering = 'NONE'
     side = 'BOTH'
