@@ -1,0 +1,24 @@
+version "${mod.getString('minecraft.version')}-${gitVersion()}"
+
+def gitVersion() {
+    if (!grgit) {
+        return 'GITBORK'.toString()
+    }
+
+    def raw = null
+
+    try {
+        raw = grgit.describe(longDescr: true)
+    } catch (Exception e) {
+        return 'NO-TAG'.toString()
+    }
+
+    def desc = (raw == null ? 'MAJOR.MINOR-PATCH-HASH' : raw).split('-') as List
+
+    desc.removeAt(desc.size() - 1)
+
+    def offset = desc.removeAt(desc.size() - 1)
+    def tag = desc.join('-')
+
+    return "${tag}.${offset}".toString()
+}

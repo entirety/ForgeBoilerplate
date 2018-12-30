@@ -1,0 +1,153 @@
+buildscript {
+    repositories {
+        mavenLocal()
+
+        maven {
+            name = 'Forge'
+            url = 'https://files.minecraftforge.net/maven'
+        }
+
+        jcenter()
+        mavenCentral()
+    }
+
+    configurations {
+        classpath.resolutionStrategy {
+            cacheDynamicVersionsFor 10, 'seconds'
+            cacheChangingModulesFor 0, 'seconds'
+        }
+    }
+
+    dependencies {
+        classpath group: 'com.moandjiezana.toml', name: 'toml4j', version: '0.7.2'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+'
+    }
+}
+
+import com.moandjiezana.toml.Toml
+
+plugins {
+    id 'net.minecrell.licenser' version '0.4'
+    id 'org.ajoberstar.grgit' version '2.3.0'
+    id 'de.undercouch.download' version '3.3.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'de.undercouch.download'
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'net.minecrell.licenser'
+
+ext {
+    JAR_SIGNER = null
+
+    if (project.hasProperty('mod-keystore')) {
+        JAR_SIGNER = [
+            keystore: project.properties.modKeystore,
+            keypass: project.properties.modKeystoreKeypass,
+            storepass: project.properties.modKeystoreStorepass
+        ]
+    }
+
+    mod = new Toml().read(project.file('mod.toml'))
+}
+
+group = mod.getString('mod.group')
+archivesBaseName = mod.getString('mod.name')
+
+apply from: 'gradle/scripts/version.gradle'
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+sourceSets {
+    api
+
+    main {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
+    }
+
+    test {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
+    }
+}
+
+configurations {
+    shade
+
+    compile.extendsFrom shade
+    apiCompile.extendsFrom compile
+    testCompile.extendsFrom apiCompile
+}
+
+minecraft {
+    mappings channel: mod.getString('minecraft.mappings.channel'), version: mod.getString('minecraft.mappings.version')
+
+    runConfig {
+        name = 'Minecraft Client'
+        main = 'net.minecraftforge.userdev.UserdevLauncher'
+
+        ideaModuleName = "${project.group}.${project.name}.main"
+        workingDirectory = project.file('run').canonicalPath
+
+        environment 'target', 'fmldevclient'
+        environment 'assetDirectory', downloadAssets.output.absolutePath
+    }
+
+    runConfig {
+        name = 'Minecraft Server'
+        main = 'net.minecraftforge.userdev.UserdevLauncher'
+
+        ideaModuleName = "${project.group}.${project.name}.main"
+        workingDirectory = project.file('run').canonicalPath
+
+        environment 'target', 'fmldevserver'
+        environment 'assetDirectory', downloadAssets.output.absolutePath
+    }
+}
+
+license {
+    header = project.file('LICENSE-HEADER.txt')
+
+    ext {
+        name = mod.getString('mod.meta.displayName')
+        year = Calendar.getInstance().get(Calendar.YEAR)
+        author = (mod.getTables('mod.authors').collect { it.getString('name') }).join(', ')
+    }
+
+    include '**/*.java'
+}
+
+processResources {
+    inputs.properties mod.toMap() + [
+        version: project.version
+    ]
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+        include 'pack.mcmeta'
+
+        expand mod.toMap() + [
+            version: project.version
+        ]
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml'
+        exclude 'pack.mcmeta'
+    }
+}
+
+task installGitHooks(type: Copy) {
+    from "${projectDir}/.git-hooks"
+    into "${projectDir}/.git/hooks"
+}
+
+apply from: 'gradle/scripts/dependencies.gradle'
+apply from: 'gradle/scripts/artifacts.gradle'
+apply from: 'gradle/scripts/publishing.gradle'

@@ -1,0 +1,6 @@
+{
+    "pack" : {
+        "description" : "${mod.meta.description}",
+        "pack_format" : 4
+    }
+}

@@ -1,0 +1,26 @@
+modLoader = '${minecraft.modLoader.loader}'
+loaderVersion = '${minecraft.modLoader.range}'
+
+issueTrackerURL = 'https://github.com/${mod.github.organisation}/${mod.github.repo}/issues'
+displayURL = 'https://github.com/${mod.github.organisation}/${mod.github.repo}'
+authors = '${(mod.authors.collect { it.name }).join(', ')}'
+
+[[mods]]
+    modId = '${mod.id}'
+    version = '${version}'
+    displayName = '${mod.meta.displayName}'
+    description = '${mod.meta.description}'
+
+[[dependencies.${mod.id}]]
+    modId = 'forge'
+    mandatory = true
+    versionRange = '${minecraft.forge.range}'
+    ordering = 'NONE'
+    side = 'BOTH'
+
+[[dependencies.${mod.id}]]
+    modId = 'minecraft'
+    mandatory = true
+    versionRange = '${minecraft.range}'
+    ordering = 'NONE'
+    side = 'BOTH'

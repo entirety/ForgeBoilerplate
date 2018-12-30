@@ -1,0 +1,4 @@
+#!/bin/sh
+
+chmod +x ./gradlew
+./gradlew --no-daemon updateLicenses > /dev/null 2>&1

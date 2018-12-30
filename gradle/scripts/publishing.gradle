@@ -1,0 +1,51 @@
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact javadocJar
+            artifact sourcesJar
+            artifact apiJar
+            artifact apiSourcesJar
+            
+            pom {
+                name = project.name
+                description = mod.getString('mod.meta.description')
+                url = "https://github.com/${mod.getString('mod.github.organisation')}/${mod.getString('mod.github.repo')}".toString()
+
+                scm {
+                    url = "https://github.com/${mod.getString('mod.github.organisation')}/${mod.getString('mod.github.repo')}".toString()
+                    connection = "scm:git:git://github.com/${mod.getString('mod.github.organisation')}/${mod.getString('mod.github.repo')}.git".toString()
+                    developerConnection = "scm:git:git@github.com:${mod.getString('mod.github.organisation')}/${mod.getString('mod.github.repo')}.git".toString()
+                }
+
+                issueManagement {
+                    system = 'github'
+                    url = "https://github.com/${mod.getString('mod.github.organisation')}/${mod.getString('mod.github.repo')}/issues".toString()
+                }
+
+                licenses {
+                    license {
+                        name = 'LGPL 2.1'
+                        url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html'
+                        distribution = 'repo'
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            if (project.hasProperty('modMaven') && project.hasProperty('modMavenUser') && project.hasProperty('modMavenPassword')) {
+                credentials {
+                    username project.properties.modMavenUser
+                    password project.properties.modMavenPassword
+                }
+
+                url project.properties.modMaven
+            } else {
+                url "file://${project.file('repo').getAbsolutePath()}"
+            }
+        }
+    }
+}

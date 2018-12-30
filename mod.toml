@@ -1,0 +1,37 @@
+[mod]
+    id = 'forgeboilerplate'
+    name = 'ForgeBoilerplate'
+    group = 'io.entirety.forgeboilerplate'
+
+    [mod.meta]
+        displayName = 'Forge Boilerplate'
+        description = 'A simple boilerplate for Minecraft Forge mods'
+
+    [mod.github]
+        organisation = 'entirety'
+        repo = 'ForgeBoilerplate'
+
+    [[mod.authors]]
+        name = 'OhYea777'
+        url = 'https://github.com/OhYea777'
+
+[minecraft]
+    version = '1.13'
+    range = '[1.13]'
+
+    [minecraft.mappings]
+        channel = 'snapshot'
+        version = '20180921-1.13'
+
+    [minecraft.forge]
+        name = 'forge'
+        group = 'net.minecraftforge.test'
+        version = '1.13-24.0.47-1.13-pre'
+        range = '[24.0.47,)'
+
+    [minecraft.modLoader]
+        loader = 'javafml'
+        range = '[13,)'
+
+[crowdin]
+    id = ''
