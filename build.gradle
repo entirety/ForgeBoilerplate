@@ -140,6 +140,7 @@ minecraft {
         environment 'MOD_CLASSES', getClasses(sourceSets.main, sourceSets.api).join(File.pathSeparator)
 
         environment 'target', 'fmluserdevserver'
+        environment 'assetDirectory', downloadAssets.output.absolutePath
     }
 
     runConfig {
@@ -156,6 +157,7 @@ minecraft {
         environment 'MOD_CLASSES', getClasses(sourceSets.main, sourceSets.test, sourceSets.api).join(File.pathSeparator)
 
         environment 'target', 'fmluserdevserver'
+        environment 'assetDirectory', downloadAssets.output.absolutePath
     }
 }
 
