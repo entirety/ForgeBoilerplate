@@ -1,14 +1,14 @@
 modLoader = '${minecraft.modLoader.loader}'
 loaderVersion = '${minecraft.modLoader.range}'
 
+issueTrackerURL = 'https://github.com/${mod.github.organisation}/${mod.github.repo}/issues'
 
 [[mods]]
     modId = '${mod.id}'
     version = '${version}'
+
     displayName = '${mod.meta.displayName}'
     description = '${mod.meta.description}'
-
-    issueTrackerURL = 'https://github.com/${mod.github.organisation}/${mod.github.repo}/issues'
     displayURL = 'https://github.com/${mod.github.organisation}/${mod.github.repo}'
     authors = '${(mod.authors.collect { it.name }).join(', ')}'
 
