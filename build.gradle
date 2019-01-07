@@ -85,6 +85,10 @@ configurations {
     testCompile.extendsFrom apiCompile
 }
 
+static def getClasses(SourceSet ...sources) {
+    return sources.collectMany { [it.output.resourcesDir, *it.output.classesDirs.asList()] }
+}
+
 minecraft {
     mappings channel: mod.getString('minecraft.mappings.channel'), version: mod.getString('minecraft.mappings.version')
 
@@ -95,7 +99,30 @@ minecraft {
         ideaModuleName = "${project.group}.${project.name}.main"
         workingDirectory = project.file('run').canonicalPath
 
-        environment 'target', 'fmldevclient'
+        environment 'FORGE_VERSION', mod.getString('minecraft.forge.version').substring(mod.getString('minecraft.version').length() + 1)
+        environment 'MCP_VERSION', mod.getString('minecraft.mappings.version')
+        environment 'MC_VERSION', mod.getString('minecraft.version')
+        environment 'FORGE_GROUP', mod.getString('minecraft.forge.group')
+        environment 'MOD_CLASSES', getClasses(sourceSets.main, sourceSets.api).join(File.pathSeparator)
+
+        environment 'target', 'fmluserdevclient'
+        environment 'assetDirectory', downloadAssets.output.absolutePath
+    }
+
+    runConfig {
+        name = 'Minecraft Test Client'
+        main = 'net.minecraftforge.userdev.UserdevLauncher'
+
+        ideaModuleName = "${project.group}.${project.name}.test"
+        workingDirectory = project.file('run').canonicalPath
+
+        environment 'FORGE_VERSION', mod.getString('minecraft.forge.version').substring(mod.getString('minecraft.version').length() + 1)
+        environment 'MCP_VERSION', mod.getString('minecraft.mappings.version')
+        environment 'MC_VERSION', mod.getString('minecraft.version')
+        environment 'FORGE_GROUP', mod.getString('minecraft.forge.group')
+        environment 'MOD_CLASSES', getClasses(sourceSets.main, sourceSets.test, sourceSets.api).join(File.pathSeparator)
+
+        environment 'target', 'fmluserdevclient'
         environment 'assetDirectory', downloadAssets.output.absolutePath
     }
 
@@ -106,9 +133,34 @@ minecraft {
         ideaModuleName = "${project.group}.${project.name}.main"
         workingDirectory = project.file('run').canonicalPath
 
-        environment 'target', 'fmldevserver'
-        environment 'assetDirectory', downloadAssets.output.absolutePath
+        environment 'FORGE_VERSION', mod.getString('minecraft.forge.version').substring(mod.getString('minecraft.version').length() + 1)
+        environment 'MCP_VERSION', mod.getString('minecraft.mappings.version')
+        environment 'MC_VERSION', mod.getString('minecraft.version')
+        environment 'FORGE_GROUP', mod.getString('minecraft.forge.group')
+        environment 'MOD_CLASSES', getClasses(sourceSets.main, sourceSets.api).join(File.pathSeparator)
+
+        environment 'target', 'fmluserdevserver'
     }
+
+    runConfig {
+        name = 'Minecraft Test Server'
+        main = 'net.minecraftforge.userdev.UserdevLauncher'
+
+        ideaModuleName = "${project.group}.${project.name}.test"
+        workingDirectory = project.file('run').canonicalPath
+
+        environment 'FORGE_VERSION', mod.getString('minecraft.forge.version').substring(mod.getString('minecraft.version').length() + 1)
+        environment 'MCP_VERSION', mod.getString('minecraft.mappings.version')
+        environment 'MC_VERSION', mod.getString('minecraft.version')
+        environment 'FORGE_GROUP', mod.getString('minecraft.forge.group')
+        environment 'MOD_CLASSES', getClasses(sourceSets.main, sourceSets.test, sourceSets.api).join(File.pathSeparator)
+
+        environment 'target', 'fmluserdevserver'
+    }
+}
+
+afterEvaluate {
+    [runMinecraftTestClient, runMinecraftTestServer]*.setClasspath(sourceSets.test.runtimeClasspath)
 }
 
 license {

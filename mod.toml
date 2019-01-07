@@ -26,12 +26,12 @@
     [minecraft.forge]
         name = 'forge'
         group = 'net.minecraftforge.test'
-        version = '1.13-24.0.47-1.13-pre'
-        range = '[24.0.47,)'
+        version = '1.13-24.0.59-1.13-pre'
+        range = '[24,)'
 
     [minecraft.modLoader]
         loader = 'javafml'
-        range = '[13,)'
+        range = '[24,)'
 
 [crowdin]
     id = ''

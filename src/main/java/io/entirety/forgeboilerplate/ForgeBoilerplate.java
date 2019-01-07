@@ -1,6 +1,6 @@
 /*
  * Forge Boilerplate
- * Copyright (C) 2018  OhYea777
+ * Copyright (C) 2018 - 2019  OhYea777
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
