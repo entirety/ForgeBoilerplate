@@ -32,6 +32,3 @@
     [minecraft.modLoader]
         loader = 'javafml'
         range = '[24,)'
-
-[crowdin]
-    id = ''

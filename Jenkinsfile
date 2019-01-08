@@ -43,7 +43,6 @@ pipeline {
             }
 
             environment {
-                MOD_CROWDIN = credentials('mod-crowdin')
                 MOD_MAVEN = credentials('mod-maven')
                 MOD_KEYSTORE = credentials('mod-keystore')
                 MOD_KEYSTORE_KEYPASS = credentials('mod-keystore-keypass')
@@ -53,7 +52,7 @@ pipeline {
 
             steps {
                 script {
-                    sh './gradlew ${GRADLE_ARGS} :publish -PmodCrowdin=${MOD_CROWDIN} -PmodMaven=${MOD_MAVEN_URL} -PmodMavenUser=${MOD_MAVEN_USR} -PmodMavenPassword=${MOD_MAVEN_PSW} -PmodKeystore=${MOD_KEYSTORE} -PmodKeystoreKeypass=${MOD_KEYSTORE_KEYPASS} -PmodKeystoreStorepass=${MOD_KEYSTORE_STOREPASS} -PmodCurseForge=${MOD_CURSE_FORGE}'
+                    sh './gradlew ${GRADLE_ARGS} :publish -PmodMaven=${MOD_MAVEN_URL} -PmodMavenUser=${MOD_MAVEN_USR} -PmodMavenPassword=${MOD_MAVEN_PSW} -PmodKeystore=${MOD_KEYSTORE} -PmodKeystoreKeypass=${MOD_KEYSTORE_KEYPASS} -PmodKeystoreStorepass=${MOD_KEYSTORE_STOREPASS} -PmodCurseForge=${MOD_CURSE_FORGE}'
                 }
             }
         }
@@ -63,13 +62,9 @@ pipeline {
                 changeRequest()
             }
 
-            environment {
-                MOD_CROWDIN = credentials('mod-crowdin')
-            }
-
             steps {
                 script {
-                    sh './gradlew ${GRADLE_ARGS} :publish -PmodCrowdin=${MOD_CROWDIN}'
+                    sh './gradlew ${GRADLE_ARGS} :publish
                 }
             }
         }

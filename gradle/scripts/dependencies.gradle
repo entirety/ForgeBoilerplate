@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    minecraft group: mod.getString('minecraft.forge.group'), name: 'userdev', version: mod.getString('minecraft.forge.version')
+    minecraft group: mod.getString('minecraft.forge.group'), name: mod.getString('minecraft.forge.name'), version: mod.getString('minecraft.forge.version')
 
     compile group: mod.getString('minecraft.forge.group'), name: mod.getString('minecraft.forge.name'), version: mod.getString('minecraft.forge.version'), classifier: 'launcher'
 
